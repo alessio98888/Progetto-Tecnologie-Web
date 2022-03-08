@@ -1,0 +1,22 @@
+{%  extends "base.html" %}
+{% load static %}
+{% block centered_central_content %}
+{% for review in review_list %}
+    <div class="card text-center mt-3 mb-3" >
+
+        <div class="card-body ">
+        <div class="d-flex justify-content-center">
+            <h5>{{ review.user }}</h5>&nbsp;&nbsp;
+            <img src="{% static "img/orange_star.png" %}"  style="height: 1.55em" alt="...">
+            <p style="color: orange; font-size: 1.15em"><strong>&nbsp;{{ review.stars }}</strong></p>
+        </div>
+
+            {% comment %}<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> {% endcomment %}
+        <p>{% if review.comment %}{{ review.comment }}{% endif %}</p>
+        <p class="font-weight-light">{{ review.date }}</p>
+        </div>
+    </div>
+
+{% endfor %}
+    <input class="btn btn-info"type=button value="Previous Page" onClick="javascript:history.go(-1);">
+{% endblock %}

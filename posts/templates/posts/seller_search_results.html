@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block central_content %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Seller</th>
+          <th scope="col">Summary reviews</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for seller in sellers %}
+            <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td><a href="{% url "user_management:home" seller.pk %}"> {{ seller.username }}</a></td>
+              <td>
+
+                  <img src="{% static "img/orange_star.png" %}"  style="height: 1.55em" alt="...">
+                    {{ seller.mean_stars|floatformat:1 }}
+                    ({{ seller.total_review_count }})
+              </td>
+            </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+
+{% endblock %}

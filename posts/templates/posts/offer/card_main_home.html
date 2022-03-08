@@ -1,0 +1,94 @@
+{% load static %}
+{% load bought_count %}
+{% load has_reviewed %}
+
+<div class="card text-center mt-3" style="width: 16em;"  >
+    <div class="card-header">
+        {% if offer.user.photo and offer.user.photo.name != "False"%}
+            <img src="{{ offer.user.photo.url}}"  style="height: 1.55em" alt="...">
+        {% else %}
+            <img src="{% static "img/default-non-user-no-photo.jpg" %}"  style="height: 1.55em" alt="...">
+        {% endif %}
+        <a href="{% url "user_management:home" offer.user.pk %}"><strong>{{ offer.user }}</strong></a>
+    </div>
+    <div class="card-body mb-0 pb-0" >
+        <div id="carouselExampleIndicators{{ offer.pk }}{{ incremental_number }}" class="carousel slide" data-ride="carousel" data-interval="false">
+          <div class="carousel-inner">
+              {% for image in offer.images.all %}
+                  {% if forloop.counter == 1 %}
+                    <div class="carousel-item active">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <img src="{{ image.photo.url}}" class="card-img-top embed-responsive-item" alt="...">
+                         </div>
+                    </div>
+                  {% else %}
+
+                    <div class="carousel-item">
+                      <div class="embed-responsive embed-responsive-16by9">
+                          <img src="{{ image.photo.url}}" class="card-img-top embed-responsive-item" alt="...">
+                         </div>
+                    </div>
+                  {% endif %}
+            {% endfor %}
+
+          </div>
+          {% if offer.images.all|length > 1 %}
+              <a class="carousel-control-prev" href="#carouselExampleIndicators{{ offer.pk }}{{ incremental_number }}" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators{{ offer.pk }}{{ incremental_number }}" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+        {% endif %}
+        </div>
+        <h3 class="card-title" style="font-size: medium">
+            {% if offer.title|length < 50 %}
+                    {{ offer.title }}
+                {% else %}
+                    {{  offer.title|slice:":50" }}...
+                {% endif %}
+        </h3>
+        <p class="card-text border-top">
+                <p class="font-weight-bold"  style="text-align: right;">{{ offer.currency }}{{ offer.price }}</p>
+                <p class="font-weight-bold  " style="text-align: right;">
+                {% if offer.mean_stars_review == None %}
+                {% else %}
+                    <a href="{% url 'posts:offer-review-list' offer.pk %}">
+                        <img src="{% static "img/orange_star.png" %}"  style="height: 1.55em" alt="...">
+                        {{ offer.mean_stars_review|floatformat:1 }}
+                        ({{ offer.review_count }})
+                    </a>
+                {% endif %}
+                </p>
+        </p>
+    </div>
+    <footer class="pb-2 pt-2 mt-0 border-top">
+
+        {% if user.is_authenticated and choose_offer != True and user.pk != offer.user.pk%}
+            <a href="{% url "posts:offer-buy" user.pk offer.pk %}" class="btn btn-outline-success mb-1">Buy</a>
+        {% endif %}
+
+        <a href="{% url "posts:offer-detail" offer.pk %}" class="btn btn-outline-info mb-1">View</a>
+        {% if choose_offer %}
+             <form method="post">{% csrf_token %}
+                <button class="btn btn-outline-success" type="submit" name="pk_offer" value={{ offer.pk }}>Offer</button>
+            </form>
+        {% endif %}
+
+    {% if user.is_authenticated %}
+        {% bought_count offer user as bought_count_var%}
+        {% has_reviewed offer user as has_reviewed_var%}
+        {% if bought_count_var > 0  %}
+            {% if not has_reviewed_var %}
+                <a href="{% url "posts:offer-add-review" user.pk offer.pk %}" class="btn btn-warning mb-1">Submit a Review</a>
+            {% else %}
+                <p class="text-info">Already reviewed</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+
+    </footer>
+</div>

@@ -1,0 +1,143 @@
+{% load static %}
+{% load bought_count %}
+{% load has_reviewed %}
+
+    <div class="card  {% if offer.deleted_but_visible_home %} bg-secondary text-white {% endif %}text-center mt-3 "  >
+
+    {% if offer.deleted_but_visible_home %}
+        <div class="card-header">
+            <strong>Deleted</strong>
+        </div>
+        {% if user.is_authenticated and userObject.pk == user.pk %}
+            <a href="{% url "posts:offer-update-visible" userObject.pk offer.pk %}" class="btn btn-secondary">Publish again</a>
+        {% endif %}
+    {% endif %}
+
+    {% if detail %}
+        <div class="card-header">
+            {% if offer.user.photo and offer.user.photo.name != "False"%}
+                <img src="{{ offer.user.photo.url}}"  style="height: 1.55em" alt="...">
+            {% else %}
+                <img src="{% static "img/default-non-user-no-photo.jpg" %}"  style="height: 1.55em" alt="...">
+            {% endif %}
+            <a href="{% url "user_management:home" offer.user.pk %}"><strong>{{ offer.user }}</strong></a>
+        </div>
+    {% endif %}
+
+    <div class="card-body " >
+        <h3 class="card-title">{{ offer.title }} </h3>
+
+        <div id="carouselExampleIndicators{{ offer.pk }}" class="carousel slide" data-ride="carousel" data-interval="false">
+          <div class="carousel-inner">
+
+              {% for image in offer.images.all %}
+                  {% if forloop.counter == 1 %}
+                    <div class="carousel-item active">
+
+                        <div class="embed-responsive embed-responsive-16by9">
+                            {% if user.is_authenticated and userObject.pk == user.pk %}
+                                <a href="{% url "posts:offer-update-photos" userObject.pk offer.pk %}" data-toggle="tooltip" data-placement="bottom" title="Change photos"> <img src="{{ image.photo.url}}" class="card-img-top embed-responsive-item " alt="..."></a>
+                            {% else %}
+                                <img src="{{ image.photo.url}}" class="card-img-top embed-responsive-item" alt="...">
+                            {% endif %}
+                         </div>
+                    </div>
+                  {% else %}
+
+                    <div class="carousel-item">
+                      <div class="embed-responsive embed-responsive-16by9">
+                            {% if user.is_authenticated and userObject.pk == user.pk %}
+                                <a href="{% url "posts:offer-update-photos" userObject.pk offer.pk %}" data-toggle="tooltip" data-placement="bottom" title="Change photos"> <img src="{{ image.photo.url}}" class="card-img-top embed-responsive-item " alt="..."></a>
+                            {% else %}
+                                <img src="{{ image.photo.url}}" class="card-img-top embed-responsive-item" alt="...">
+                            {% endif %}
+                         </div>
+                    </div>
+                  {% endif %}
+            {% endfor %}
+
+          </div>
+          {% if offer.images.all|length > 1 %}
+              <a class="carousel-control-prev" href="#carouselExampleIndicators{{ offer.pk }}" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators{{ offer.pk }}" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+        {% endif %}
+        </div>
+
+        <p class="card-text border-top">
+            <p><strong>Description</strong></p>
+            {% if detail == True or user_home == True %}
+                {{ offer.description }}
+            {% else %}
+                {% if offer.description|length < 70 %}
+                    {{ offer.description }}
+                {% else %}
+                    {{ offer.description|slice:":70" }}...
+                {% endif %}
+             {% endif %}
+            <div class="d-flex justify-content-between border-top mt-3 pt-3">
+                <p class="font-weight-light">Category</p>
+                <p class="font-weight-bold">{{ offer.category }}</p>
+            </div>
+            <div class="d-flex justify-content-between border-top mt-3 pt-3">
+                <p class="font-weight-light">Price</p>
+                <p class="font-weight-bold">{{ offer.currency }}{{ offer.price }}</p>
+            </div>
+
+            <div class="d-flex justify-content-between border-top mt-3 pt-3">
+                <p class="font-weight-light">Mean stars</p>
+            {% comment %}
+            {% url posts:offer_review_list offer.pk %}
+            {% endcomment %}
+            <p class="font-weight-bold">
+                {% if offer.mean_stars_review == None %}
+                    No reviews
+                {% else %}
+                    <a href="{% url 'posts:offer-review-list' offer.pk %}">{{ offer.mean_stars_review|floatformat:1 }}({{ offer.review_count }})</a>
+                {% endif %}
+            </p>
+
+            </div>
+             <div class="d-flex justify-content-between">
+                 <p></p>
+                <p class="font-weight-light">{{ offer.date }}</p>
+            </div>
+            {% comment %}{{ offer.rank}}{% endcomment %}
+            {% if user.is_authenticated and userObject.pk == user.pk %}
+                <a href="{% url "posts:offer-update" userObject.pk offer.pk %}" class="btn btn-success">Edit</a>
+                <a href="{% url "posts:offer-delete" userObject.pk offer.pk %}" class="btn btn-danger">Delete</a>
+            {% endif %}
+            {% if detail %}
+                <input class="btn btn-info"type=button value="Previous Page" onClick="javascript:history.go(-1);">
+            {% endif %}
+            {% if user.is_authenticated %}
+                {% if detail == True %}
+                    <a href="{% url "posts:offer-buy" user.pk offer.pk %}" class="btn btn-success mb-1">Buy</a>
+
+                {% endif %}
+            {% endif %}
+            {% if user.is_authenticated and userObject.pk != user.pk%}
+                {% if detail != True and offer.deleted_but_visible_home == False %}
+                    <a href="{% url "posts:offer-buy" user.pk offer.pk %}" class="btn btn-success mb-1">Buy</a>
+                {% endif %}
+                {% bought_count offer user as bought_count_var%}
+                {% has_reviewed offer user as has_reviewed_var%}
+                {% if bought_count_var > 0  %}
+                    {% if not has_reviewed_var %}
+                        <a href="{% url "posts:offer-add-review" user.pk offer.pk %}" class="btn btn-warning mb-1">Submit a Review</a>
+                    {% else %}
+                        <p class="text-info">Already reviewed</p>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+        </p>
+
+    </div>
+
+</div>

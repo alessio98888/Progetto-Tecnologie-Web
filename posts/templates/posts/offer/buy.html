@@ -1,0 +1,12 @@
+{%  extends "user_profile/base.html" %}
+
+{% block central_content %}
+
+    <h1>Do You Want to Buy Offer <b>{{ offer.title }}</b>?</h1>
+    <form method="post">{% csrf_token %}
+        <input class="btn btn-danger"type=button value="Cancel" onClick="javascript:history.go(-1);">
+        <input class = "btn btn-success" type="submit" value="Buy"/>
+    </form>
+
+
+{% endblock %}

@@ -1,0 +1,4 @@
+{%  extends "base.html" %}
+{% block centered_central_content %}
+    {% include "posts/request/card.html" with request=object userObject=None detail=True main_home=False%}
+{% endblock %}

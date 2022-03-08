@@ -1,0 +1,89 @@
+<div  class="card" >{% comment %} style="width: 18rem;"{% endcomment %}
+  <div class="card-body ">
+    <h5 class="card-title ">{{ name}}</h5>
+    {% comment %}<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> {% endcomment %}
+    <p class="card-text" >
+         <div class="container-fluid ">
+                     {% for el in objects %}
+                         <div class="row my-profile-card-p d-flex justify-left " >
+                            <div class="col pb-2 pt-2 mt-2 ml-0 pl-0 d-flex" >
+
+                                {% with el.classname as modelclass %}
+                                    {% if modelclass == "LanguageProficiency" %}
+                                        <div class="d-flex justify-content">
+                                            <p class="font-weight-bold">{{ el.name }}</p>
+                                            <p>&nbsp;-&nbsp;</p>
+                                            <p class="font-weight-light"> {{ el.level }}</p>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if modelclass == "Skill" %}
+                                        <div class="d-flex justify-content">
+                                            <p class="font-weight-bold">{{ el.description }}</p>
+                                            <p>&nbsp;-&nbsp;</p>
+                                            <p class="font-weight-light"> {{ el.experience_level }}</p>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if modelclass == "Education" %}
+                                        <div class="ml-2 pl-2">
+                                            <div class="row " >
+                                                <p>{{ el.title }} &nbsp;-&nbsp; {{ el.major }}</p>
+                                            </div>
+                                            <div class="row " >
+                                                <p class="font-weight-light" > {{ el.college }},&nbsp;{{ el.country }},&nbsp;Graduated&nbsp; {{ el.graduation_year }}</p>
+                                            </div>
+
+                                        </div>
+                                    {% endif %}
+
+                                    {% if modelclass == "Certification" %}
+                                        <div class="ml-2 pl-2">
+                                            <div class="row" >
+                                                <p>{{ el.name }}</p>
+                                            </div>
+                                            <div class="row" >
+                                                <p class="font-weight-light" > {{ el.certifiedFrom }}, {{ el.year }}</p>
+                                            </div>
+
+                                        </div>
+                                    {% endif %}
+
+                                {% endwith %}
+
+
+                                <div class="d-flex pl-0">
+                                {% if user.is_authenticated and userObject.pk == user.pk %}
+
+                                    <a class= "ml-2 mr-2" href= "{% url delete_view userObject.pk el.pk %}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i> </a>
+                                    <a class= "" href= "{% url update_view userObject.pk el.pk %}" data-toggle="tooltip" data-placement="top" title="Change"><i class="fa fa-edit"></i> </a>
+
+                                {% endif %}
+                                </div>
+                            </div>
+                            {% comment %}
+                            <div class="col-md-auto pb-2 pt-2 mt-2">
+                                {% if user.is_authenticated and userObject.pk == user.pk %}
+                                <a class= "mr-2" href= "{% url delete_view userObject.pk el.pk %}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i> </a>
+                                <a class= "" href= "{% url update_view userObject.pk el.pk %}" data-toggle="tooltip" data-placement="top" title="Change"><i class="fa fa-edit"></i> </a>
+                                {% endif %}
+                            </div>
+
+
+                            <div class="col-md-auto pb-2 pt-2 mt-2">
+                                {% if user.is_authenticated and userObject.pk == user.pk %}
+
+                                {% endif %}
+                            </div>
+                            {% endcomment %}
+                         </div>
+                     {% endfor %}
+
+
+        </div>
+    </p>
+  {% if user.is_authenticated and userObject.pk == user.pk %}
+     <a href="{% url view userObject.pk %}" class="btn btn-success"  id="skill">Add</a>
+  {% endif %}
+  </div>
+</div>

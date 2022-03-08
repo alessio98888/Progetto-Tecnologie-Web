@@ -1,0 +1,52 @@
+{%  extends "user_management/baseAuth.html" %}
+
+{%  block title %}
+Register
+{% endblock %}
+
+
+{% load crispy_forms_tags %}
+{% block central_content %}
+    <h1> Register </h1>
+    <form method="post" enctype='multipart/form-data'>{% csrf_token %}
+        {{ form|crispy }}
+        <input class = "btn btn-success" type="submit" value="Register"/>
+    </form>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $('#id_username').change(function() {
+            console.log($(this).val());
+            $.ajax({
+                type: 'GET',
+                url: '{% url 'user_management:check-username-unique' %}',
+                data: {
+                    'username' : $(this).val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.is_not_unique){
+                        alert('Username is not unique!');
+                    }
+                }
+            })
+        });
+
+        $('#id_email').change(function() {
+            console.log($(this).val());
+            $.ajax({
+                type: 'GET',
+                url: '{% url 'user_management:check-email-unique' %}',
+                data: {
+                    'email' : $(this).val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.is_not_unique){
+                        alert('Email is not unique!');
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}

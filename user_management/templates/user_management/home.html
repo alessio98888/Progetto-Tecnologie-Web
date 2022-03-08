@@ -1,0 +1,65 @@
+{%  extends "user_management/base.html" %}
+{% load static %}
+
+{% block left_content %}
+    <div class="card text-center mt-3"  >
+        {% if userObject.photo and userObject.photo.name != "False"%}
+            {% if user.is_authenticated and userObject.pk == user.pk %}
+                <a href="{% url "user_profile:personal_info-updatePhoto" userObject.pk %}" data-toggle="tooltip" data-placement="top" title="Change image"> <img src="{{ userObject.photo.url}}" class="card-img-top " alt="..."></a>
+            {% else %}
+                <img src="{{ userObject.photo.url}}" class="card-img-top embed-responsive-item" alt="...">
+            {% endif %}
+        {% else %}
+            {% if user.is_authenticated and userObject.pk == user.pk %}
+                <a href="{% url "user_profile:personal_info-updatePhoto" userObject.pk %}" data-toggle="tooltip" data-placement="top" title="Change image"> <img src="{% static "img/default-non-user-no-photo.jpg" %}" class="card-img-top " alt="..."></a>
+            {% else %}
+                <img src="{% static "img/default-non-user-no-photo.jpg" %}" class="card-img-top embed-responsive-item" alt="...">
+            {% endif %}
+        {% endif %}
+
+        <div class="card-body pb-0 pt-1">
+            <h5 class="card-title">{{ userObject.username }}</h5>
+            {% comment %}<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> {% endcomment %}
+            <p class="card-text border-top">
+                <p><strong>Description</strong></p>{{ userObject.description }}
+            <div class="d-flex justify-content-between border-top mt-3 pt-3">
+                <p class="font-weight-light">First name</p>
+                <p class="font-weight-bold">{{ userObject.first_name }}</p>
+            </div>
+            <div class="d-flex justify-content-between">
+
+                <p class="font-weight-light">Last name </p>
+                <p class="font-weight-bold">{{ userObject.last_name }}</p>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p class="font-weight-light">Birth date</p>
+                <p class="font-weight-bold">{{ userObject.birth_date }}</p>
+            </div>
+            {% if user.is_authenticated and userObject.pk == user.pk %}
+                <a href="{% url "user_profile:personal_info-update" userObject.pk %}" class="btn btn-success">Edit</a>
+            {% endif %}
+            </p>
+
+        </div>
+        {% if user.is_authenticated and userObject.pk != user.pk %}
+             <div class="card-footer">
+                    <a class="btn btn-success pt-2" href="{% url "integrated_messaging:message-send" userObject.pk %}">Send Message</a>
+             </div>
+        {% endif %}
+    </div>
+
+
+    <ul></ul>
+    {% include "user_profile/card.html" with objects=languages name="Languages" view="user_profile:language-add" update_view="user_profile:language-update" delete_view="user_profile:language-delete" %}
+    <ul></ul>
+    {% include "user_profile/card.html" with objects=skills name="Skills" view="user_profile:skill-add" update_view="user_profile:skill-update" delete_view="user_profile:skill-delete" %}
+    <ul></ul>
+    {% include "user_profile/card.html" with objects=education name="Education" view="user_profile:education-add" update_view="user_profile:education-update" delete_view="user_profile:education-delete" %}
+    <ul></ul>
+    {% include "user_profile/card.html" with objects=certifications name="Certifications" view="user_profile:certification-add" update_view="user_profile:certification-update" delete_view="user_profile:certification-delete" %}
+
+{% endblock %}
+
+{% block right_content %}
+    {% include "posts/homepage_offer_list.html" %}
+{% endblock %}

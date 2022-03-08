@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block central_content %}
+
+    <div class="container-fluid">
+        <h4 class="pt-2">Offers: recently added</h4>
+        <div class="row d-flex flex-nowrap">
+            {% for offer in offers_recently_added %}
+                <div class="col col-md-auto  d-flex">
+                    {% include "posts/offer/card_main_home.html" with offer=offer userObject=None main_home=True incremental_number=1%}
+                </div>
+            {% endfor %}
+        </div>
+
+        <h4 class="pt-2">Requests: recently added</h4>
+
+        <div class="row d-flex flex-nowrap mb-3">
+        {% for request in requests_recently_added %}
+            <div class="col col-md-auto  d-flex">
+                {% include "posts/request/card_main_home.html" with request=request userObject=None main_home=True%}
+            </div>
+        {% endfor %}
+        </div>
+        {% if user.is_authenticated %}
+            {% if recommended_offers %}
+                <h4 class="pt-2">Recommended offers</h4>
+
+                    <div class="row d-flex flex-nowrap mb-3">
+                    {% for offer in recommended_offers %}
+                        <div class="col col-md-auto  d-flex">
+                            {% include "posts/offer/card_main_home.html" with offer=offer userObject=None main_home=True incremental_number=2%}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+        {% endif %}
+    </div>
+
+{% endblock %}

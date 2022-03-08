@@ -1,0 +1,14 @@
+
+{% load crispy_forms_tags %}
+
+<form method="post" {% if photo %} enctype='multipart/form-data' {% endif %} >{% csrf_token %}
+    {{ form|crispy }}
+
+    {% if view_type == "context_url" %}
+    <a href="{{ url }}" class = "btn btn-danger">Cancel</a>
+    {% else %}
+    <input class = "btn btn-danger" type="submit" name="cancel" value="Cancel" />
+    {% endif %}
+
+    <input class = "btn btn-success" type="submit" value="{{ value }}"/>
+</form>

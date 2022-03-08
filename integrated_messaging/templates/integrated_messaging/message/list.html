@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block centered_central_content %}
+<div class="container-fluid mb-5">
+    <div class="row">
+    <div class="col"></div>
+    <div class="col-10  p-3" style="background-color: #00ffc7">
+        <div id="message-box">
+        {% for message in messages %}
+            <div class="row mt-3">
+            {% if message.sender.pk == user.pk %}
+               {% include "integrated_messaging/message/my_message.html" with message=message %}
+            {% elif message.receiver.pk == user.pk %}
+                {% include "integrated_messaging/message/other_user_message.html" with message=message %}
+            {% endif %}
+            </div>
+        {% endfor %}
+
+        </div>
+        <div class="row d-flex justify-content-end mt-3" >
+        <form id="post-form" method="POST" class="form-inline">
+            <div class="d-flex mr-2">
+                <input class=" form-control-plaintext bg-white " type="text" id="message-input" name="message-input" placeholder="Type a message">
+            {% csrf_token %}
+            <div id="results"></div>
+            <button type="submit" class="btn btn-success ml-2">Send</button>
+            </div>
+        </form>
+    </div>
+    </div>
+
+    <div class="col"></div>
+
+    </div>
+
+</div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+        $(function () {
+            $.ajaxSetup({
+                headers: { "X-CSRFToken": csrftoken }
+            });
+        });
+         function create_post() {
+            console.log("create post is working!") // sanity check
+            $.ajax({
+                url : "{% url "integrated_messaging:send-message-inline-ajax" %}", // the endpoint
+                type : "POST", // http method
+                data : {
+                    message_content : $('#message-input').val(),
+                    receiver_pk : {{ sender_view.pk }},
+                }, // data sent with the post request
+
+                // handle a successful response
+                success : function(result) {
+                    $('#message-input').val(''); // remove the value from the input
+                    console.log(result); // log the returned json to the console
+                    $("#message-box").append(
+                        "<div class=\"row mt-3\">" + result + "</div>"
+
+                    );
+
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
+
+
+        $('#post-form').on('submit', function(event){
+            event.preventDefault();
+            console.log("form submitted!")  // sanity check
+            create_post();
+        });
+     </script>
+{% endblock %}

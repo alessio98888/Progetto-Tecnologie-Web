@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block central_content %}
+
+    <div class="container-fluid ">
+        <h4 class="pt-2">Orders</h4>
+        {% if orders %}
+            <div class="row d-flex" >
+                {% for order in orders %}
+
+                    <div class="col-2 d-flex  "> {% comment %}d-flex align-items-stretch  flex-row flex-nowrap{% endcomment %}
+                        {% include "posts/order/order_card.html" with offer=order.offer buyer=order.user userObject=None main_home=True%}
+
+                    </div>
+
+                {% endfor %}
+            </div>
+        {% else %}
+            No Bought Offers Found
+        {% endif %}
+    </div>
+
+{% endblock %}

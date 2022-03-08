@@ -1,0 +1,16 @@
+<div class="card text-center mt-3" >
+        <div class="card-body ">
+            <h3 class="card-text">Offers</h3>
+        </div>
+    </div>
+
+
+{% for offer in offers %}
+    {% include "posts/offer/card.html" with offer=offer userObject=userObject user_home=True%}
+{% endfor %}
+
+{% if user.is_authenticated and userObject.pk == user.pk %}
+    <div class="card  {% if offer.deleted_but_visible_home  %} bg-secondary text-white {% endif %}text-center mt-3" >
+    <a href="{% url "posts:offer-add" userObject.pk%}" class="btn btn-info">Add New Offer</a>
+    </div>
+{% endif %}

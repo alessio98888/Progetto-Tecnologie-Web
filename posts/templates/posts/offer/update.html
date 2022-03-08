@@ -1,0 +1,21 @@
+{%  extends "user_profile/base.html" %}
+
+{% block title %}
+Update Offer
+{% endblock %}
+{% block central_content %}
+
+    {% if request.resolver_match.kwargs.pk == user.pk %}
+
+    {% include "form.html" with photo=True view_type="context_url" value="Update" %}
+
+    {% else %}
+
+    <div class="alert alert-warning" role="alert">
+      You are not authorized
+    </div>
+
+    {% endif %}
+
+{% endblock %}
+

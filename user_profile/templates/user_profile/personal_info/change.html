@@ -1,0 +1,22 @@
+{%  extends "user_profile/base.html" %}
+
+{% block title %}
+    Update Personal Info
+{% endblock %}
+
+{% block central_content %}
+
+        {% if view.kwargs.pk == user.pk %}
+
+        {% include "form.html" with view_type="class" value="Update" %}
+
+        {% else %}
+
+        <div class="alert alert-warning" role="alert">
+          You are not authorized
+        </div>
+
+        {% endif %}
+
+{% endblock %}
+

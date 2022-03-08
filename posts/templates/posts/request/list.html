@@ -1,0 +1,18 @@
+{%  extends "base.html" %}
+
+{% block centered_central_content %}
+    <div class="card text-center mt-3" >
+        <div class="card-body ">
+            <h3 class="card-text">Requests</h3>
+        </div>
+    </div>
+
+{% for request in requests %}
+    {% include "posts/request/card.html" with request=request userObject=userObject %}
+{% endfor %}
+{% if user.is_authenticated and userObject.pk == user.pk %}
+    <div class="card  text-center mt-3" >
+    <a href="{% url "posts:request-add" userObject.pk%}" class="btn btn-info">Add New Request</a>
+    </div>
+{% endif %}
+{% endblock %}

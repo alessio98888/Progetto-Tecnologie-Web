@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% block centered_central_content %}
+    <div class="row  py-2 px-1">
+    <h1>Chat</h1>
+    </div>
+    {% if chat_user_count == 0 %}
+        No Messages
+    {% else %}
+
+        {% for chat_user, last_message in chat_users.items %}
+
+            <div class="row  border-bottom py-2 px-1 " >
+
+                <a class="col d-flex justify-content btn btn-light" href="{% url "integrated_messaging:message-list" chat_user.pk %}">
+                   {% if chat_user.photo and chat_user.photo.name != "False"%}
+                        <img src="{{ chat_user.photo.url}}"  style="height: 5em" alt="...">
+                    {% else %}
+                        <img src="{% static "img/default-non-user-no-photo.jpg" %}"  style="height: 5em" alt="...">
+                    {% endif %}
+                    {% comment %}<a class="stretched-link" style="color:black" href="{% url "integrated_messaging:message-list" chat_user.pk %}"></a>{% endcomment %}
+                    <div class="col">
+                        <h2>
+                            {{chat_user}}
+                        </h2>
+                        {% if last_message.sender.pk == user.pk %}
+                        You:
+                        {% else %}
+                        {{ last_message.sender }}:
+                        {% endif %}
+                        {{ last_message.message_content }}
+                    </div>
+
+
+                <p>{{ last_message.date }}</p>
+            </a>
+            </div>
+
+
+        {% endfor %}
+
+    {% endif %}
+
+
+
+{% endblock %}

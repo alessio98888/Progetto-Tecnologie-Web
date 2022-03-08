@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block central_content %}
+    {% if request.user.pk == user.pk %}
+        <div class="container-fluid ">
+            <h4 class="pt-2">Pending Offers</h4>
+            <div class="row d-flex flex-nowrap " >
+                {% for offer_request in pending_offers %}
+                    {% if offer_request.offer.deleted_but_visible_home == False %}
+                        <div class="col-2 d-flex  ">
+                            {% include "posts/offer/card_main_home.html" with offer=offer_request.offer userObject=None %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        <input class="btn btn-info mt-1" type=button value="Previous Page" onClick="javascript:history.go(-1);">
+        </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+          You are not authorized
+        </div>
+    {% endif %}
+
+{% endblock %}

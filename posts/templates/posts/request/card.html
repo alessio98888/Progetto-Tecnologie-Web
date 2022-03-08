@@ -1,0 +1,66 @@
+{% load static %}
+    <div class="card text-center mt-3 ">
+        {% if detail %}
+            <div class="card-header">
+                {% if request.user.photo and request.user.photo.name != "False"%}
+                    <img src="{{ request.user.photo.url}}"  style="height: 1.55em" alt="...">
+                {% else %}
+                    <img src="{% static "img/default-non-user-no-photo.jpg" %}"  style="height: 1.55em" alt="...">
+                {% endif %}
+                <a href="{% url "user_management:home" request.user.pk %}"><strong>{{ request.user }}</strong></a>
+            </div>
+        {% endif %}
+
+        <div class="card-body " >
+            <h3 class="card-title">{{ request.title }} </h3>
+
+
+
+            <p class="card-text border-top">
+                <p><strong>Description</strong></p>
+                {% if detail == True or user_home == True %}
+                    {{ request.description }}
+                {% else %}
+                    {% if request.description|length < 70 %}
+                        {{ request.description }}
+                    {% else %}
+                        {{ request.description|slice:":70" }}...
+                    {% endif %}
+                 {% endif %}
+                <div class="d-flex justify-content-between border-top mt-3 pt-3">
+                    <p class="font-weight-light">Category</p>
+                    <p class="font-weight-bold">{{ request.category }}</p>
+                </div>
+                <div class="d-flex justify-content-between border-top mt-3 pt-3">
+                    <p class="font-weight-light">Price</p>
+                    <p class="font-weight-bold">{{ request.currency }}{{ request.price }}</p>
+                </div>
+
+
+                 <div class="d-flex justify-content-between">
+                     <p></p>
+                    <p class="font-weight-light">{{ request.date }}</p>
+                </div>
+
+
+                {% if user.is_authenticated and userObject.pk == user.pk %}
+                    <a href="{% url "posts:request-update" userObject.pk request.pk %}" class="btn btn-success">Edit</a>
+                    <a href="{% url "posts:request-delete" userObject.pk request.pk %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+                {% if detail %}
+                    <input class="btn btn-info"type=button value="Previous Page" onClick="javascript:history.go(-1);">
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    {% if detail == True %}
+                        <a href="{% url "posts:offer-to-request" request.pk %}" class="btn btn-success">Offer</a>
+                    {% endif %}
+                {% endif %}
+                {% if detail == True %}
+                {% else %}
+                    <a href="{% url "posts:offers-for-request-list" request.pk %}" class="btn btn-light">View pending offers</a>
+                {% endif %}
+
+            </p>
+        </div>
+    </div>

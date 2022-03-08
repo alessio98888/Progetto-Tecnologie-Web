@@ -1,0 +1,12 @@
+{%  extends "user_profile/base.html" %}
+
+{% block central_content %}
+
+    <h1>Delete Request <b>{{ request.title }}</b>?</h1>
+    <form method="post">{% csrf_token %}
+        <a href="{{ url }}" class = "btn btn-danger">Cancel</a>
+        <input class = "btn btn-danger" type="submit" value="Delete"/>
+    </form>
+
+
+{% endblock %}

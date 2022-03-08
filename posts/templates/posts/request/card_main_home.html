@@ -1,0 +1,74 @@
+{% load static %}
+<div class="card text-center mt-3 " >
+    <div class="card-header">
+        {% if request.user.photo and request.user.photo.name != "False"%}
+            <img src="{{ request.user.photo.url}}"  style="height: 1.55em" alt="...">
+        {% else %}
+            <img src="{% static "img/default-non-user-no-photo.jpg" %}"  style="height: 1.55em" alt="...">
+        {% endif %}
+        <a href="{% url "user_management:home" request.user.pk %}"><strong>{{ request.user }}</strong></a>
+    </div>
+    <div class="card-body mb-0 pb-0" >
+        <div id="carouselExampleIndicators{{ request.pk }}" class="carousel slide" data-ride="carousel" data-interval="false">
+          <div class="carousel-inner">
+
+              {% for image in request.images.all %}
+                  {% if forloop.counter == 1 %}
+                    <div class="carousel-item active">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <img src="{{ image.photo.url}}" class="card-img-top embed-responsive-item" alt="...">
+                         </div>
+                    </div>
+                  {% else %}
+
+                    <div class="carousel-item">
+                      <div class="embed-responsive embed-responsive-16by9">
+                          <img src="{{ image.photo.url}}" class="card-img-top embed-responsive-item" alt="...">
+                         </div>
+                    </div>
+                  {% endif %}
+            {% endfor %}
+
+          </div>
+          {% if request.images.all|length > 1 %}
+              <a class="carousel-control-prev" href="#carouselExampleIndicators{{ request.pk }}" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators{{ request.pk }}" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+        {% endif %}
+        </div>
+        <h3 class="card-title" style="font-size: medium">
+            {% if request.title|length < 50 %}
+                    {{ request.title }}
+                {% else %}
+                    {{  request.title|slice:":50" }}...
+                {% endif %}
+        </h3>
+        <p class="card-text border-top">
+                <p class="font-weight-bold"  style="text-align: right;">{{ request.currency }}{{ request.price }}</p>
+                <p class="font-weight-bold  " style="text-align: right;">
+                {% if request.mean_stars_review == None %}
+                {% else %}
+                    <a href="{% url 'posts:offer-review-list' request.pk %}">
+                        <img src="{% static "img/orange_star.png" %}"  style="height: 1.55em" alt="...">
+                        {{ request.mean_stars_review }}
+                        ({{ request.review_count }})
+                    </a>
+                {% endif %}
+                </p>
+        </p>
+    </div>
+    <footer class="pb-2 pt-2 mt-0 border-top">
+
+        {% if user.is_authenticated and user.pk != request.user.pk%}
+            <a href="{% url "posts:offer-to-request" request.pk %}" class="btn btn-outline-success">Offer</a>
+        {% endif %}
+
+        <a href="{% url "posts:request-detail" request.pk %}" class="btn btn-outline-info">View</a>
+
+    </footer>
+</div>
