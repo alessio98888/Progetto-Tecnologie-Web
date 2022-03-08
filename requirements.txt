@@ -2,3 +2,4 @@ Django==3.2.9
 django-crispy-forms
 django-pandas
 scipy
+Pillow
