@@ -27,7 +27,7 @@ jobs:
         pip install -r requirements.txt
     - name: Lint the code
       run: |
-        django-lint .
+        pylint --load-plugins pylint_django
     - name: Run Tests
       run: |
         python manage.py test
