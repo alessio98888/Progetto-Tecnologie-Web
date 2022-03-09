@@ -27,7 +27,7 @@ jobs:
         pip install -r requirements.txt
     - name: Lint the code
       run: |
-        pylint --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings [Base, posts]
+        pylint --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings Base posts
     - name: Run Tests
       run: |
         python manage.py test
