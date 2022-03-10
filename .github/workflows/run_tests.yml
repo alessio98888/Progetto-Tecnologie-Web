@@ -26,9 +26,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Lint the code
-      continue-on-error: true
+      #continue-on-error: true
       run: |
-        pylint --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings Base posts intergrated_messaging user_management user_profile
+        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings Base posts intergrated_messaging user_management user_profile
         
     - name: Run Tests
       run: |
