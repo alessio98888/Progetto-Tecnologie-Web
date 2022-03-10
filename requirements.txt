@@ -4,3 +4,4 @@ django-pandas
 pylint-django
 scipy
 Pillow
+coverage
