@@ -28,7 +28,7 @@ jobs:
     - name: Lint the code
       continue-on-error: true
       run: |
-        pylint --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings Base posts
+        pylint --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings Base posts intergrated_messaging user_management user_profile
         
     - name: Run Tests
       run: |
