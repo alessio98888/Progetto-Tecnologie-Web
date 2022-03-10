@@ -30,6 +30,7 @@ jobs:
       run: |
         pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings Base posts intergrated_messaging user_management user_profile
         
-    - name: Run Tests
+    - name: Run Tests and Coverage
       run: |
-        python manage.py test
+        #python manage.py test
+        coverage run --source='.' manage.py test
