@@ -35,7 +35,7 @@ jobs:
     - name: Run Tests and Coverage
       run: |
         #python manage.py test
-        coverage run --source='ProgettoArduAlessio' manage.py test
+        coverage run --source='ProgettoArduAlessio' ProgettoArduAlessio/manage.py test
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
