@@ -38,6 +38,7 @@ jobs:
         coverage run --source='ProgettoArduAlessio' ProgettoArduAlessio/manage.py test
   push_to_registry:
     name: Push Docker image to Docker Hub
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
