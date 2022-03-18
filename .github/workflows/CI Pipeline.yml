@@ -26,16 +26,16 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r ProgettoArduAlessio/requirements.txt
     - name: Lint the code
       #continue-on-error: true
       run: |
-        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings Base posts #intergrated_messaging user_management user_profile
+        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio/ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #intergrated_messaging user_management user_profile
         
     - name: Run Tests and Coverage
       run: |
         #python manage.py test
-        coverage run --source='.' manage.py test
+        coverage run --source='ProgettoArduAlessio' manage.py test
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
