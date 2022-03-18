@@ -18,6 +18,7 @@ COPY ProgettoArduAlessio /opt/app/ProgettoArduAlessio/
 WORKDIR /opt/app
 RUN pip install -r ProgettoArduAlessio/requirements.txt --cache-dir /opt/app/pip_cache
 RUN chown -R www-data:www-data /opt/app
+RUN ["chmod", "+x", "start-server.sh"]
 
 # start server
 EXPOSE 8020
