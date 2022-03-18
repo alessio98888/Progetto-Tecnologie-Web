@@ -30,7 +30,7 @@ jobs:
     - name: Lint the code
       #continue-on-error: true
       run: |
-        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio/ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #intergrated_messaging user_management user_profile
+        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio/ProgettoArduAlessio/settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #intergrated_messaging user_management user_profile
         
     - name: Run Tests and Coverage
       run: |
