@@ -13,7 +13,6 @@ RUN mkdir -p /opt/app
 RUN mkdir -p /opt/app/pip_cache
 RUN mkdir -p /opt/app/ProgettoArduAlessio
 COPY ProgettoArduAlessio/requirements.txt start-server.sh /opt/app/
-#COPY .pip_cache /opt/app/pip_cache/
 COPY ProgettoArduAlessio /opt/app/ProgettoArduAlessio/
 WORKDIR /opt/app
 RUN pip install -r ProgettoArduAlessio/requirements.txt --cache-dir /opt/app/pip_cache
