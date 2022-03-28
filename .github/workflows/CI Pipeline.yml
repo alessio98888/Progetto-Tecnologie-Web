@@ -23,24 +23,21 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r ProgettoArduAlessio/requirements.txt
-    - name: Lint the code
-      #continue-on-error: true
-      run: |
-        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #intergrated_messaging user_management user_profile
+   
+    
     - name: Build Docker image
       run: docker build . --file Dockerfile --tag $image_name
-    - name: Run Tests and Coverage on Docker Container
+    - name: Run Tests on Docker Container
       run: |
         #
         docker run -d --name web_app -p 8020:8020 $image_name
         docker exec web_app coverage run --source='ProgettoArduAlessio' ProgettoArduAlessio/manage.py test ProgettoArduAlessio
-    - name: Run Coverage
+    - name: Run Coverage on Docker Container
       run: |
         docker exec web_app coverage report
+    - name: Run Lint on Docker Container
+      run: |
+        docker exec web_app pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #intergrated_messaging user_management user_profile
   push_to_registry:
     name: Push Docker image to Docker Hub
     if: github.event_name == 'release'
