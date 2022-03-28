@@ -14,7 +14,9 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7, 3.8, 3.9]
-
+    env:
+      ## Environment variable
+      image_name: a3lg4/progetto_tecnologie_web:$(date + %s)
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -30,11 +32,11 @@ jobs:
       run: |
         pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #intergrated_messaging user_management user_profile
     - name: Build Docker image
-      run: docker build . --file Dockerfile --tag a3lg4/progetto_tecnologie_web:$(date +%s)
+      run: docker build . --file Dockerfile --tag $image_name
     - name: Run Tests and Coverage on Docker Container
       run: |
         #
-        docker run -d --name web_app -p 8020:8020 a3lg4/progetto_tecnologie_web
+        docker run -d --name web_app -p 8020:8020 $image_name
         docker exec web_app coverage run --source='ProgettoArduAlessio' ProgettoArduAlessio/manage.py test ProgettoArduAlessio
   push_to_registry:
     name: Push Docker image to Docker Hub
