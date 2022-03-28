@@ -38,6 +38,9 @@ jobs:
         #
         docker run -d --name web_app -p 8020:8020 $image_name
         docker exec web_app coverage run --source='ProgettoArduAlessio' ProgettoArduAlessio/manage.py test ProgettoArduAlessio
+    - name: Run Coverage
+      run: |
+        docker exec web_app coverage report
   push_to_registry:
     name: Push Docker image to Docker Hub
     if: github.event_name == 'release'
