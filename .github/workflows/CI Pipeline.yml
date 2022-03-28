@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - '*' 
+      - 'development' 
 
   release:
     types: [published, edited]
