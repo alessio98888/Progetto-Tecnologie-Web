@@ -35,7 +35,7 @@ jobs:
     - name: Lint the code
       #continue-on-error: true
       run: |
-        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts ProgettoArduAlessio/intergrated_messaging ProgettoArduAlessio/user_management ProgettoArduAlessio/user_profile
+        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts ProgettoArduAlessio/intergrated_messaging ProgettoArduAlessio/user_management #ProgettoArduAlessio/user_profile
     
   push_to_registry:
     name: Push Docker image to Docker Hub
