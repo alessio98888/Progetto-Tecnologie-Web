@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - 'development' 
+      - '*' 
 
   release:
     types: [published, edited]
@@ -27,15 +27,17 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r ProgettoArduAlessio/requirements.txt
-    - name: Lint the code
-      #continue-on-error: true
-      run: |
-        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #intergrated_messaging user_management user_profile
     
     - name: Run Tests and Coverage
       run: |
         #
         coverage run --source='ProgettoArduAlessio' ProgettoArduAlessio/manage.py test ProgettoArduAlessio
+
+    - name: Lint the code
+      #continue-on-error: true
+      run: |
+        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #ProgettoArduAlessio/intergrated_messaging ProgettoArduAlessio/user_management ProgettoArduAlessio/user_profile
+    
   push_to_registry:
     name: Push Docker image to Docker Hub
     if: github.event_name == 'release'
