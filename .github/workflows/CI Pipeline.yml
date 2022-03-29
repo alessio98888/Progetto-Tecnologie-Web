@@ -14,9 +14,7 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7, 3.8, 3.9]
-    env:
-      ## Environment variable
-      image_name: a3lg4/progetto_tecnologie_web:latest
+    
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
