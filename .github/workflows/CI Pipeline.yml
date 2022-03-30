@@ -1,7 +1,8 @@
 on:
   push:
     branches:
-      - '*' 
+      - 'development' 
+      - 'master'
 
   release:
     types: [published, edited]
