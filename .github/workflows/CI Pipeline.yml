@@ -1,7 +1,8 @@
 on:
   push:
     branches:
-      - '*' 
+      - 'development' 
+      - 'master'
 
   release:
     types: [published, edited]
@@ -13,16 +14,15 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8, 3.9]
-    env:
-      ## Environment variable
-      image_name: a3lg4/progetto_tecnologie_web:latest
+        python-version: [3.7]
+    
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
@@ -36,7 +36,7 @@ jobs:
     - name: Lint the code
       #continue-on-error: true
       run: |
-        pylint --fail-under=6 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts #ProgettoArduAlessio/intergrated_messaging ProgettoArduAlessio/user_management ProgettoArduAlessio/user_profile
+        pylint --fail-under=5 --load-plugins pylint_django --django-settings-module ProgettoArduAlessio.settings ProgettoArduAlessio/Base ProgettoArduAlessio/posts ProgettoArduAlessio/integrated_messaging ProgettoArduAlessio/user_management #ProgettoArduAlessio/user_profile
     
   push_to_registry:
     name: Push Docker image to Docker Hub
