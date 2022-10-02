@@ -30,7 +30,7 @@ jobs:
     
     - name: Run Tests and Coverage
       run: |
-        ##
+        #
         coverage run --source='ProgettoArduAlessio' ProgettoArduAlessio/manage.py test ProgettoArduAlessio
 
     - name: Lint the code
